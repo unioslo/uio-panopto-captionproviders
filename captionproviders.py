@@ -43,7 +43,7 @@ def main():
     authorization(requests_session, oauth2, args.username, panopto_password)
 
     # Call Panopto API (geting caption providers with paging)
-    # Note: CAlling this API currently requires admin role.
+    # Note: Calling this API currently requires Administrator access.
     providers = []
     page_number = 0
     print('Calling GET /api/v1/captionproviders endpoint')
