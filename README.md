@@ -8,7 +8,7 @@ These scripts are authorized based on User Based Server Application. User Based 
 Most of authorization logic is in common code: [panopto_oauth2.py](common/panopto_oauth2.py).
 
 ## Preparation
-1. You need a Panopto user account.
+1. You need a Panopto user account. It needs to be an Administrator account for the CaptionProviders API
 2. If you do not have Python 3 on your system, install the latest stable version from https://python.org. (Tested with Python 3.11.)
 3. Install external modules for this application.
 ```
@@ -42,7 +42,7 @@ python captionproviders.py --server [Panopto server name] --client-id [Client ID
 
 ```
 This displays the list of caption providers in the instance. 
-Note that this script must run as an admin user to access the list of caption providers.
+Note that this script must run as an Administrator user to access the list of caption providers.
 
 ## Run the captionprovider_for_folders script to set captionprovider where it is not set
 
@@ -57,12 +57,12 @@ Type the following command:
 ```
 python captionprovider_for_folders.py --server [Panopto server name] --client-id [Client ID] --client-secret [Client Secret] --username [User name] --password-var [Name of OS variable with password] --start-folder-id [Folder ID to start] --provider-id [ID of provider to set] --provider-name [Name (not DisplayName) of provider to set]
 ```
-This displays the list of caption providers in the instance. 
-Note that this script must run as an admin user to access the list of caption providers.
+This sets the caption provider for child folders (and their children folders recursively) in the instance starting from `--start-folder-id`
+This script can be run as a user with `Videographer`+ `Caption Requester` access.
 
 
 ## License
-Copyright 2024 UiO
+Copyright 2025 The University of Oslo
 
 Based on and includes portions of https://github.com/Panopto/panopto-api-python-examples,  which is Copyright 2019 Panopto
 
