@@ -1,4 +1,4 @@
-# uio-captionproviders-panopto
+# uio-panopto-captionproviders
 
 Scripts to set captionprovider for folders using the Panopto REST API
 
