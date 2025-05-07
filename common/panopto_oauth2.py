@@ -11,6 +11,11 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler
 from socketserver import ThreadingTCPServer
 
+# Based on and includes Panopto sample file common/panopto_oauth2.py which is 
+# Copyright Panopto 2019, Apache 2.0 License
+# Modifications Copyright The University of Oslo 2025, Apache 2.0 License
+# Currently minor code standard and print statement modifications only
+
 # This code uses this local URL as redirect target for Authorization Code Grant (Server-side Web Application)
 REDIRECT_URL = 'http://localhost:9127/redirect'
 REDIRECT_PORT = 9127

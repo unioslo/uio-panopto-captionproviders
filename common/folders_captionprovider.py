@@ -3,7 +3,11 @@ import requests
 import urllib.parse
 import time
 
-class PanoptoFoldersUB:
+# Based on and includes portions of Panopto sample file folders-cli/panopto_folders.py which is 
+# Copyright Panopto 2019, Apache 2.0 License
+# Modifications Copyright The University of Oslo 2025, Apache 2.0 License
+
+class PanoptoFoldersCaptionprovider:
     def __init__(self, server, ssl_verify, oauth2, username, password):
         '''
         Constructor of folders API handler instance.

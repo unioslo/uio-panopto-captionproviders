@@ -4,16 +4,16 @@ import os
 import argparse
 import requests
 import urllib3
-from common.panopto_folders_user_based import PanoptoFoldersUB
+from common.folders_captionprovider import PanoptoFoldersCaptionprovider
 from common.panopto_oauth2 import PanoptoOAuth2
 
 def parse_argument():
     parser = argparse.ArgumentParser(description='Sample of Authorization as User Based Server Application')
     parser.add_argument('--server', dest='server', required=True, help='Server name as FQDN')
-    parser.add_argument('--client-id', dest='client_id', required=True, help='Client ID of OAuth2 client')
-    parser.add_argument('--client-secret', dest='client_secret', required=True, help='Client Secret of OAuth2 client')
-    parser.add_argument('--username', dest='username', required=True, help='Username for OAuth2 Resource Owner Grant')
-    parser.add_argument('--password-var', dest='password_var', required=True, help='OS environment variable name for password')
+    parser.add_argument('--client-id-var', dest='client_id_var', default='PAN_CLIENT_ID', help='OS environment variable for Client ID of OAuth2 client')
+    parser.add_argument('--client-secret-var', dest='client_secret_var', default='PAN_CLIENT_SECRET', help='OS environment variable for Client Secret of OAuth2 client')
+    parser.add_argument('--username-var', dest='username_var', default='PAN_USERNAME', help='OS environment variable for username for script')
+    parser.add_argument('--password-var', dest='password_var', default='PAN_PWD', help='OS environment variable for password')
     parser.add_argument('--start-folder-id', dest='start_folder_id', required=True, help='Initial folder ID')
     parser.add_argument('--provider-id', dest='provider_id', required=True, help='ID of the caption provider, use None to remove caption provider')
     parser.add_argument('--provider-name', dest='provider_name', required=True, help='Name of the caption provider, use None to remove caption provider')
@@ -39,12 +39,24 @@ def process_subfolders_inorder(panopto_folders, folder_id, provider_id, provider
         process_subfolders_inorder(panopto_folders, child['Id'], provider_id, provider_name, level + 1)
 
 def main():
-    # Parse command line arguments and get password from environment variable
-    # Note: Password is not passed as command line argument for security reasons.
+    # Parse command line arguments and get client_id, client_secret, password and username from environment variables
+    # Note: Not passed as command line arguments for security reasons.
     args = parse_argument()
+    client_id = os.environ.get(args.client_id_var) # None if not set
+    if client_id is None or client_id == '':
+        print('error: Environment variable for client_id is not set {0}'.format(args.client_id_var))
+        exit(1)
+    client_secret = os.environ.get(args.client_secret_var) # None if not set
+    if client_secret is None or client_secret == '':
+        print('error: Environment variable for client_secret is not set {0}'.format(args.client_secret_var))
+        exit(1)
+    panopto_username = os.environ.get(args.username_var) # None if not set
+    if panopto_username is None or panopto_username == '':
+        print('error: Environment variable for Panopto username is not set {0}'.format(args.username_var))
+        exit(1)
     panopto_password = os.environ.get(args.password_var) # None if not set
     if panopto_password is None or panopto_password == '':
-        print('error: Environment variable for password is not set {0}'.format(args.password_var))
+        print('error: Environment variable for Panopto password is not set {0}'.format(args.password_var))
         exit(1)
 
     if args.skip_verify:
@@ -58,10 +70,10 @@ def main():
     requests_session.verify = not args.skip_verify
     
     # Load OAuth2 logic
-    oauth2 = PanoptoOAuth2(args.server, args.client_id, args.client_secret, not args.skip_verify)
+    oauth2 = PanoptoOAuth2(args.server, client_id, client_secret, not args.skip_verify)
 
     # Create PanoptoFoldersUB instance
-    panopto_folders = PanoptoFoldersUB(args.server, not args.skip_verify, oauth2, args.username, panopto_password)
+    panopto_folders = PanoptoFoldersCaptionprovider(args.server, not args.skip_verify, oauth2, panopto_username, panopto_password)
 
     # Process all children folders
     process_subfolders_inorder(panopto_folders, args.start_folder_id, args.provider_id, args.provider_name)

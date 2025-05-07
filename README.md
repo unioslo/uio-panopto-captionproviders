@@ -3,7 +3,7 @@
 Scripts to set captionprovider for folders using the Panopto REST API
 
 ## Authorization as User Based Server Application
-These scripts are authorized based on User Based Server Application. User Based Server Application is not recommended in general, because the application needs to handle the user's password directly. For some types of scripts, that is OK.
+These scripts are authorized based on User Based Server Application. User Based Server Application is not recommended in general, because the application needs to handle the user's password directly. For some types of scripts, that is OK as long as the machine running the scripts is secure.
 
 Most of authorization logic is in common code: [panopto_oauth2.py](common/panopto_oauth2.py).
 
@@ -27,37 +27,39 @@ TODO: Other required modules?
 8. The rest can be blank. Click "Create API Client" button.
 9. Note the created Client ID and Client Secret.
 
+## Prepare the environment variables 
+
+These are the default environment variable names.
+
+Type the following commands (Linux).
+
+```
+export PAN_CLIENT_ID=some_client_id
+export PAN_CLIENT_SECRET=some_client_secret
+export PAN_USERNAME=some_username
+export PAN_PWD=some_password
+```
+
 ## Run the captionproviders script to list available captionproviders
-
-Export the password to OS variable chosen for password, e.g. for Linux:
-
-```
-export THE_PANOPTO_PWD=somepassword
-```
 
 Type the following command:
 
 ```
-python captionproviders.py --server [Panopto server name] --client-id [Client ID] --client-secret [Client Secret] --username [User name] --password-var [Name of OS variable with password]
+python captionproviders.py --server [Panopto server name] 
 
 ```
 This displays the list of caption providers in the instance. 
-Note that this script must run as an Administrator user to access the list of caption providers.
+Note that this script must currently be run as an Administrator user to access the list of caption providers.
 
 ## Run the captionprovider_for_folders script to set captionprovider where it is not set
-
-Export the password to OS variable chosen for password (if not already done), e.g. for Linux:
-
-```
-export THE_PANOPTO_PWD=somepassword
-```
 
 Type the following command:
 
 ```
-python captionprovider_for_folders.py --server [Panopto server name] --client-id [Client ID] --client-secret [Client Secret] --username [User name] --password-var [Name of OS variable with password] --start-folder-id [Folder ID to start] --provider-id [ID of provider to set] --provider-name [Name (not DisplayName) of provider to set]
+python captionprovider_for_folders.py --server [Panopto server name] --start-folder-id [Folder ID to start] --provider-id [ID of provider to set] --provider-name [Name (not DisplayName) of provider to set]
 ```
-This sets the caption provider for child folders (and their children folders recursively) in the instance starting from `--start-folder-id`
+This sets the caption provider for child folders (and their children folders recursively) in the instance starting from the `--start-folder-id` folder (if the caption provider it is not already set).
+Note that the script does not currenlty modify the `--start-folder-id` folder itself, only its children.
 This script can be run as a user with `Videographer`+ `Caption Requester` access.
 
 
