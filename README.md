@@ -14,7 +14,6 @@ Most of authorization logic is in common code: [panopto_oauth2.py](common/panopt
 ```
 pip install requests oauthlib requests_oauthlib
 ```
-TODO: Other required modules?
 
 ## Setup API Client on Panopto server
 1. Sign in to the Panopto web site
@@ -49,7 +48,7 @@ python captionproviders.py --server [Panopto server name]
 
 ```
 This displays the list of caption providers in the instance. 
-Note that this script must currently be run as an Administrator user to access the list of caption providers.
+Note that this script must currently be run as an `Administrator` user to access the list of caption providers.
 
 ## Run the captionprovider_for_folders script to set captionprovider where it is not set
 
